@@ -1,4 +1,4 @@
-package com.example.pokemon.ui.search
+package com.example.pokemon.ui.pokemon
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val pokeApi: PokeApi) : ViewModel() {
+class PokemonViewModel(private val pokeApi: PokeApi) : ViewModel() {
     val ldPokemon: MutableLiveData<ResponseData> = MutableLiveData()
     fun getPokemon(pokemonName : String): LiveData<ResponseData> {
         sendServerRequest(pokemonName)
@@ -34,7 +34,6 @@ class SearchViewModel(private val pokeApi: PokeApi) : ViewModel() {
                         ResponseData.Error(Throwable(message))
                 }
             }
-
         }
     }
 

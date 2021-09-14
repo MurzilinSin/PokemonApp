@@ -1,21 +1,17 @@
 package com.example.pokemon.di
 
 import com.example.pokemon.model.api.PokeApi
-import com.example.pokemon.ui.search.SearchViewModel
+import com.example.pokemon.ui.pokemon.PokemonViewModel
 import com.google.gson.GsonBuilder
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
 val viewModelModule : Module = module {
-    viewModel { SearchViewModel(provideRetrofit()) }
+    viewModel { PokemonViewModel(provideRetrofit()) }
 }
 
 val retrofitModule : Module = module {

@@ -3,4 +3,6 @@
     <string name="pokemon_search">Find your Pokemon</string>
     <string name="pokemon_image">pokemon_image</string>
     <string name="base_stats">Base stats</string>
+    <string name="search_pokemon">Search Pokemon</string>
+    <string name="random_pokemon">Random Pokemon</string>
 </resources>
