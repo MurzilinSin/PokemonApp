@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.pokemon.ui.pokemon.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_favouriteFragment"
+            app:destination="@id/favouriteFragment" />
+        <argument
+            android:name="type"
+            app:argType="com.example.pokemon.model.Type"
+            android:defaultValue="Search" />
+    </fragment>
+    <fragment
+        android:id="@+id/randomFragment"
+        android:name="com.example.pokemon.ui.pokemon.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_randomFragment_to_favouriteFragment"
+            app:destination="@id/favouriteFragment" />
+        <argument
+            android:name="type"
+            app:argType="com.example.pokemon.model.Type"
+            android:defaultValue="Random" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.example.pokemon.ui.FavouriteFragment"
+        android:label="FavouriteFragment" >
+        <action
+            android:id="@+id/action_favouriteFragment_to_randomFragment"
+            app:destination="@id/randomFragment" />
+        <action
+            android:id="@+id/action_favouriteFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+</navigation>

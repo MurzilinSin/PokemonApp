@@ -1,5 +1,9 @@
 package com.example.pokemon.model.responce
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class Pokemon(
     val abilities: List<Ability>,
     val base_experience: Int,
@@ -7,7 +11,7 @@ data class Pokemon(
     val game_indices: List<GameIndice>,
     val height: Int,
     val held_items: List<Any>,
-    val id: Int,
+    @PrimaryKey val id: Int,
     val is_default: Boolean,
     val location_area_encounters: String,
     val moves: List<Move>,
@@ -18,5 +22,6 @@ data class Pokemon(
     val sprites: Sprites,
     val stats: List<Stat>,
     val types: List<Type>,
-    val weight: Int
+    val weight: Int,
+    var isFavourite: Boolean = false
 )
