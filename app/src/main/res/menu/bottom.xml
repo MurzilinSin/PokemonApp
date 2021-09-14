@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search_dark"
+        android:title="@string/search_pokemon"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/randomFragment"
+        android:icon="@drawable/psyduck"
+        android:title="@string/random_pokemon"
+        app:showAsAction="never"/>
+</menu>
