@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pokemon.model.ResponseData
 import com.example.pokemon.model.api.PokeApi
+import com.example.pokemon.model.responce.Pokemon
+import com.example.pokemon.repo.Repo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,6 +14,9 @@ import kotlinx.coroutines.launch
 
 class PokemonViewModel(private val pokeApi: PokeApi) : ViewModel() {
     val ldPokemon: MutableLiveData<ResponseData> = MutableLiveData()
+    private val pokeRepo = Repo.get()
+    val pokeLiveData = pokeRepo.getPokemons()
+
     fun getPokemon(pokemonName : String): LiveData<ResponseData> {
         sendServerRequest(pokemonName)
         return ldPokemon
@@ -36,6 +41,10 @@ class PokemonViewModel(private val pokeApi: PokeApi) : ViewModel() {
             }
         }
     }
+
+    suspend fun addPokemon(pokemon: Pokemon) = pokeRepo.addPokemon(pokemon)
+
+    suspend fun deletePokemon(pokemon: Pokemon) = pokeRepo.deletePokemon(pokemon)
 
     override fun onCleared() {
         super.onCleared()

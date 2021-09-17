@@ -7,13 +7,33 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#B1B1B1</color>
     <color name="grayAlpha20">#33E6E6E6</color>
-    <color name="fire">#770404</color>
-    <color name="flying">#FFBB86FC</color>
+    <color name="alpha_10_white">#1AFFFFFF</color>
+
     <color name="hp">#E6D329</color>
     <color name="attack">#DF2214</color>
     <color name="defence">#834DE4</color>
     <color name="special_attack">#AE0A0A</color>
     <color name="special_defence">#390791</color>
     <color name="speed">#57D55C</color>
+
+    <color name="normal">#FFA8A77A</color>
+    <color name="fire">#770404</color>
+    <color name="water">#FF6390F0</color>
+    <color name="electric">#FFF7D02C</color>
+    <color name="grass">#FF7AC74C</color>
+    <color name="ice">#FF96D9D6</color>
+    <color name="fighting">#FFC22E28</color>
+    <color name="poison">#FFA33EA1</color>
+    <color name="ground">#FFE2BF65</color>
+    <color name="flying">#FFA98FF3</color>
+    <color name="psychic">#FFF95587</color>
+    <color name="bug">#FFA6B91A</color>
+    <color name="rock">#FFB6A136</color>
+    <color name="ghost">#FF735797</color>
+    <color name="dragon">#FF6F35FC</color>
+    <color name="dark">#FF705746</color>
+    <color name="steel">#FFB7B7CE</color>
+    <color name="fairy">#FFD685AD</color>
 </resources>

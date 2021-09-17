@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/searchFragment">
+    app:startDestination="@id/favouriteFragment">
 
     <fragment
         android:id="@+id/searchFragment"
@@ -31,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.example.pokemon.ui.FavouriteFragment"
+        android:name="com.example.pokemon.ui.favourite.FavouriteFragment"
         android:label="FavouriteFragment" >
         <action
             android:id="@+id/action_favouriteFragment_to_randomFragment"
