@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main_container"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_default">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/poke_img"
@@ -168,55 +168,137 @@
                 app:layout_constraintTop_toBottomOf="@+id/linear_weight"
                 app:layout_constraintStart_toStartOf="parent"
                 />
-            <com.google.android.material.button.MaterialButton
+            <ProgressBar
                 android:id="@+id/stat_hp"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="25dp"
+                android:progressDrawable="@drawable/custom_progress_bg"
+                app:layout_constraintCircleRadius="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginTop="1dp"
-                android:backgroundTint="@color/hp"
-                app:cornerRadius="13dp"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/stats_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HP"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/stat_hp"
+                app:layout_constraintTop_toTopOf="@+id/stat_hp"/>
+            <TextView
+                android:id="@+id/hp_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/stat_hp"
+                app:layout_constraintTop_toTopOf="@+id/stat_hp"
+                tools:text="76"/>
+
+            <ProgressBar
                 android:id="@+id/stat_attack"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="25dp"
+                android:progressDrawable="@drawable/custom_progress_bg"
+                app:layout_constraintCircleRadius="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginTop="1dp"
-                android:backgroundTint="@color/attack"
-                app:cornerRadius="13dp"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/stat_hp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
-            <com.google.android.material.button.MaterialButton
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Atk"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/stat_attack"
+                app:layout_constraintTop_toTopOf="@+id/stat_attack"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/stat_attack"
+                app:layout_constraintTop_toTopOf="@+id/stat_attack"
+                tools:text="76"/>
+
+            <ProgressBar
                 android:id="@+id/stat_defence"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="25dp"
+                android:progressDrawable="@drawable/custom_progress_bg"
+                app:layout_constraintCircleRadius="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginTop="1dp"
-                android:backgroundTint="@color/defence"
-                app:cornerRadius="13dp"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/stat_attack"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Def"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/stat_defence"
+                app:layout_constraintTop_toTopOf="@+id/stat_defence"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/stat_defence"
+                app:layout_constraintTop_toTopOf="@+id/stat_defence"
+                tools:text="76"/>
+
+            <ProgressBar
                 android:id="@+id/stat_speed"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="25dp"
+                android:progressDrawable="@drawable/custom_progress_bg"
+                app:layout_constraintCircleRadius="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginTop="1dp"
-                android:backgroundTint="@color/speed"
-                app:cornerRadius="13dp"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/stat_defence"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spd"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/stat_speed"
+                app:layout_constraintTop_toTopOf="@+id/stat_speed"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/stat_speed"
+                app:layout_constraintTop_toTopOf="@+id/stat_speed"
+                tools:text="76"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,4 +5,5 @@
     <string name="base_stats">Base stats</string>
     <string name="search_pokemon">Search Pokemon</string>
     <string name="random_pokemon">Random Pokemon</string>
+    <string name="empty_view_text">Seems you haven\'t favourite pokemons</string>
 </resources>

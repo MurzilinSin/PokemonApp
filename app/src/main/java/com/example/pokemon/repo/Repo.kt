@@ -16,9 +16,8 @@ class Repo private constructor(context: Context){
     private val pokemonDAO = db.pokemonDAO()
 
     fun getPokemons(): LiveData<List<Pokemon>> = pokemonDAO.getPokemons()
-    fun addPokemon(pokemon: Pokemon) {
-        pokemonDAO.addPokemon(pokemon)
-    }
+    suspend fun addPokemon(pokemon: Pokemon) = pokemonDAO.addPokemon(pokemon)
+    suspend fun deletePokemon(pokemon: Pokemon) = pokemonDAO.deletePokemon(pokemon)
 
     companion object {
         private var INSTANCE: Repo? = null

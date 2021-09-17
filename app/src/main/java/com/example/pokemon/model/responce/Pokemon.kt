@@ -3,6 +3,7 @@ package com.example.pokemon.model.responce
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+
 @Entity
 data class Pokemon(
     val abilities: List<Ability>,
