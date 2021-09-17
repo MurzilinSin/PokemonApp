@@ -6,4 +6,9 @@
     <string name="search_pokemon">Search Pokemon</string>
     <string name="random_pokemon">Random Pokemon</string>
     <string name="empty_view_text">Seems you haven\'t favourite pokemons</string>
+    <string name="image_icon">image_icon</string>
+    <string name="stat_hp">HP</string>
+    <string name="stat_attack">ATK</string>
+    <string name="stat_defence">DEF</string>
+    <string name="stat_speed">SPD</string>
 </resources>
