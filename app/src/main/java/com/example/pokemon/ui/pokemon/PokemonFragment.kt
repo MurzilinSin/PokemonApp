@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat.jumpDrawablesToCurrentState
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import com.example.pokemon.R
@@ -23,13 +22,12 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
-const val TAG = "Fragment"
-private const val ARG_POKEMON = "pokemon"
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by inject<PokemonViewModel>()
     private lateinit var pokemon: Pokemon
+    private var pokemonsDB: MutableList<Pokemon> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +50,11 @@ class SearchFragment : Fragment() {
                 search()
             }
         }
+        viewModel.pokeLiveData.observe(viewLifecycleOwner,{ pokemons ->
+            for (pokemon in pokemons) {
+                pokemonsDB.add(pokemon)
+            }
+        })
     }
 
     private fun search(){
@@ -61,7 +64,7 @@ class SearchFragment : Fragment() {
         binding.pokemonSearch.setEndIconOnClickListener {
             val pokemonName = binding.inputEditText.text.toString().trim()
             if(pokemonName.isEmpty()){
-                binding.inputEditText.text?.clear()
+                binding.inputEditText.editableText
             } else {
                 viewModel.getPokemon(pokemonName)
             }
@@ -79,25 +82,18 @@ class SearchFragment : Fragment() {
     private fun renderData(responseData: ResponseData?) {
         when(responseData) {
             is ResponseData.Success -> {
-                pokemon = responseData.pokemonResponse
-                viewModel.pokeLiveData.observe(viewLifecycleOwner,{ pokemons ->
-                    for (pokemonFromDB in pokemons) {
-                        if(pokemon.id == pokemonFromDB.id) {
-                            binding.includedPokemon.isFavourite.isChecked = pokemonFromDB.isFavourite
-                            binding.includedPokemon.isFavourite.jumpDrawablesToCurrentState()
-                        }
+                val pokeData = responseData.pokemonResponse
+                for (pokemonDB in pokemonsDB) {
+                    if(pokemonDB.id == pokeData.id) {
+                        binding.includedPokemon.isFavourite.isChecked = true
                     }
-                })
-
-
+                }
                 binding.includedPokemon.pokeImg.visibility = View.VISIBLE
                 binding.includedPokemon.pokeCard.visibility = View.VISIBLE
                 binding.includedPokemon.pokeType2.visibility = View.GONE
                 binding.loading.visibility = View.GONE
-                val pokeData = responseData.pokemonResponse
-                if(pokeData.isFavourite) {
-                    binding.includedPokemon.isFavourite.isChecked = true
-                }
+
+
                 Picasso
                     .get()
                     .load(pokeData.sprites.front_default)
@@ -125,28 +121,15 @@ class SearchFragment : Fragment() {
                 binding.includedPokemon.isFavourite.setOnCheckedChangeListener { _, isChecked ->
                     viewModel.viewModelScope.launch {
                         if(isChecked){
-                            viewModel.addPokemon(pokemon)
-                        } else viewModel.deletePokemon(pokemon)
+                            viewModel.addPokemon(pokeData)
+                        } else viewModel.deletePokemon(pokeData)
                     }
                 }
-                binding.includedPokemon.statHp.progress = pokeData.stats[0].base_stat
-                progressBarAnimation(binding.includedPokemon.statHp,pokeData.stats[0].base_stat,700)
-                progressBarAnimation(binding.includedPokemon.statAttack,pokeData.stats[1].base_stat,700)
-                progressBarAnimation(binding.includedPokemon.statDefence,pokeData.stats[2].base_stat,700)
-                progressBarAnimation(binding.includedPokemon.statSpeed,pokeData.stats[3].base_stat,700)
-                binding.includedPokemon.statAttack.progress = pokeData.stats[1].base_stat
-                binding.includedPokemon.statDefence.progress = pokeData.stats[2].base_stat
-                binding.includedPokemon.statSpeed.progress = pokeData.stats[3].base_stat
-                val drawableAttack = ResourcesCompat.getDrawable(resources,R.drawable.attack_progress_bg,context?.theme)
-                binding.includedPokemon.statAttack.progressDrawable = drawableAttack
-                val drawableDefence = ResourcesCompat.getDrawable(resources,R.drawable.defence_progress_bg,context?.theme)
-                binding.includedPokemon.statDefence.progressDrawable = drawableDefence
-                val drawableSpeed = ResourcesCompat.getDrawable(resources,R.drawable.speed_progress_bg,context?.theme)
-                binding.includedPokemon.statSpeed.progressDrawable = drawableSpeed
+
+                setProgressBarUI(pokeData)
             }
             is ResponseData.Loading -> {
                 binding.loading.visibility = View.VISIBLE
-                println("WE'VE JUST LOADING AND LOADING")
             }
             is ResponseData.Error -> {
                /* dialogWithOneButtonShow("Error",
@@ -157,20 +140,26 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun setProgressBarUI(pokeData: Pokemon) {
+        progressBarAnimation(binding.includedPokemon.statHp,pokeData.stats[0].base_stat,698)
+        progressBarAnimation(binding.includedPokemon.statAttack,pokeData.stats[1].base_stat,702)
+        progressBarAnimation(binding.includedPokemon.statDefence,pokeData.stats[2].base_stat,699)
+        progressBarAnimation(binding.includedPokemon.statSpeed,pokeData.stats[3].base_stat,701)
+        binding.includedPokemon.statHp.progress = pokeData.stats[0].base_stat
+        binding.includedPokemon.statAttack.progress = pokeData.stats[1].base_stat
+        binding.includedPokemon.statDefence.progress = pokeData.stats[2].base_stat
+        binding.includedPokemon.statSpeed.progress = pokeData.stats[3].base_stat
+        val drawableAttack = ResourcesCompat.getDrawable(resources,R.drawable.attack_progress_bg,context?.theme)
+        binding.includedPokemon.statAttack.progressDrawable = drawableAttack
+        val drawableDefence = ResourcesCompat.getDrawable(resources,R.drawable.defence_progress_bg,context?.theme)
+        binding.includedPokemon.statDefence.progressDrawable = drawableDefence
+        val drawableSpeed = ResourcesCompat.getDrawable(resources,R.drawable.speed_progress_bg,context?.theme)
+        binding.includedPokemon.statSpeed.progressDrawable = drawableSpeed
+    }
+
     private fun progressBarAnimation(progressBar: ProgressBar, end: Int,duration: Long){
         val animator = ObjectAnimator.ofInt(progressBar,"progress",0,end)
         animator.duration = duration
         animator.start()
-    }
-
-    companion object {
-        fun newInstance(state: String): SearchFragment{
-            val args = Bundle().apply {
-                putSerializable(ARG_POKEMON, state)
-            }
-            return  SearchFragment().apply {
-                arguments = args
-            }
-        }
     }
 }

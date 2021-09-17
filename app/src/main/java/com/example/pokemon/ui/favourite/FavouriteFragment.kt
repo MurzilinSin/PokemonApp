@@ -2,15 +2,11 @@ package com.example.pokemon.ui.favourite
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pokemon.R
 import com.example.pokemon.databinding.FragmentFavouriteBinding
 import com.example.pokemon.model.responce.Pokemon
 import org.koin.android.ext.android.inject
@@ -19,7 +15,6 @@ class FavouriteFragment: Fragment() {
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler : RecyclerView
-    private lateinit var emptyView : TextView
     private var adapter: FavouriteAdapter? = FavouriteAdapter(emptyList())
     private val viewModel by inject<FavouriteViewModel>()
 
@@ -38,11 +33,18 @@ class FavouriteFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.pokeLiveData.observe(viewLifecycleOwner,{
-            updateUI(it)
+            if(it.isNotEmpty()) {
+                updateUI(it)
+            } else {
+                recycler.visibility = View.GONE
+                binding.emptyView.visibility = View.VISIBLE
+            }
         })
     }
 
     private fun updateUI(pokemons: List<Pokemon>) {
+        recycler.visibility = View.VISIBLE
+        binding.emptyView.visibility = View.GONE
         adapter = FavouriteAdapter(pokemons)
         recycler.adapter = adapter
     }

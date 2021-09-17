@@ -21,7 +21,7 @@ class PokemonViewModel(private val pokeApi: PokeApi) : ViewModel() {
         sendServerRequest(pokemonName)
         return ldPokemon
     }
-    var job: Job? = null
+    private var job: Job? = null
 
     private fun sendServerRequest(pokemonName: String) {
         ldPokemon.value = ResponseData.Loading(null)

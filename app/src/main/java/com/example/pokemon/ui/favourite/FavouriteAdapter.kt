@@ -10,7 +10,7 @@ import com.example.pokemon.model.responce.Pokemon
 import com.example.pokemon.ui.favourite.FavouriteAdapter.*
 import com.squareup.picasso.Picasso
 
-class FavouriteAdapter(var pokemons: List<Pokemon>): RecyclerView.Adapter<PokemonViewHolder>() {
+class FavouriteAdapter(private var pokemons: List<Pokemon>): RecyclerView.Adapter<PokemonViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PokemonViewHolder(layoutInflater.inflate(R.layout.recycler_favourite_poke_item,parent,false))
@@ -28,7 +28,7 @@ class FavouriteAdapter(var pokemons: List<Pokemon>): RecyclerView.Adapter<Pokemo
     }
     inner class PokemonViewHolder(view: View): RecyclerView.ViewHolder(view) {
         lateinit var pokemon: Pokemon
-        val image = itemView.findViewById<ImageView>(R.id.poke_img)
+        private val image: ImageView = itemView.findViewById(R.id.poke_img)
         fun bind(pokemon: Pokemon){
             this.pokemon = pokemon
             Picasso
