@@ -5,98 +5,116 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_default">
+    <com.google.android.material.textfield.TextInputLayout
+        android:visibility="gone"
+        android:id="@+id/pokemon_search"
+        app:boxCornerRadiusBottomEnd="25dp"
+        app:boxCornerRadiusTopEnd="25dp"
+        app:boxCornerRadiusBottomStart="25dp"
+        app:boxCornerRadiusTopStart="25dp"
+        app:boxStrokeColor="@color/white"
+        app:endIconMode="custom"
+        app:endIconTint="@color/white"
+        app:endIconDrawable="@drawable/ic_search"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/search_text_input_layout_style">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_edit_text"
+            style="@style/search_text_input_edit_text_style" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ImageView
         android:id="@+id/poke_img"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
-        android:elevation="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/pokemon_image"
+        android:elevation="2dp"
         android:visibility="gone"
-        tools:visibility="visible"
-        tools:src="@drawable/charizard"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon_search"
+        tools:src="@drawable/charizard"
+        tools:visibility="visible" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/poke_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginBottom="25dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        tools:visibility="visible"
-        app:cardCornerRadius="25dp">
+        android:layout_marginTop="130dp"
+        app:cardCornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pokemon_search"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ToggleButton
-                android:id="@+id/is_favourite"
-                android:background="@drawable/button_favourite"
-                android:textOff=""
-                android:textOn=""
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
+
             <TextView
                 android:id="@+id/poke_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
-                android:textStyle="bold"
                 android:textSize="25sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="#6 Charizard"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="#6 Charizard" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/poke_type_1"
                 style="@style/material_button_pokemon_type"
                 app:cornerRadius="40dp"
-                app:layout_constraintVertical_chainStyle="spread_inside"
+                app:layout_constraintEnd_toStartOf="@+id/poke_type_2"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/poke_type_2"
                 app:layout_constraintTop_toBottomOf="@+id/poke_name"
-                tools:text="Fire"/>
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                tools:text="Fire" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/poke_type_2"
                 style="@style/material_button_pokemon_type"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="30dp"
                 app:cornerRadius="40dp"
-                app:layout_constraintVertical_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/poke_type_1"
                 app:layout_constraintTop_toBottomOf="@+id/poke_name"
-                tools:text="Flying"/>
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                tools:text="Flying" />
 
             <LinearLayout
                 android:id="@+id/linear_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="30dp"
-                app:layout_constraintTop_toBottomOf="@+id/poke_type_1"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/splitter"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/splitter">
+                app:layout_constraintTop_toBottomOf="@+id/poke_type_1">
+
                 <ImageView
                     android:id="@+id/weight_img"
-                    android:src="@drawable/ic_weight"
                     style="@style/image_icon"
-                    android:contentDescription="@string/image_icon"/>
+                    android:contentDescription="@string/image_icon"
+                    android:src="@drawable/ic_weight" />
+
                 <TextView
                     android:id="@+id/weight_text"
                     style="@style/text_view_under_icon"
-                    tools:text="390 kg"/>
+                    tools:text="390 kg" />
             </LinearLayout>
 
             <View
@@ -105,112 +123,164 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/black"
-                app:layout_constraintVertical_chainStyle="spread"
                 app:layout_constraintEnd_toStartOf="@+id/linear_height"
                 app:layout_constraintHorizontal_bias="0.536"
                 app:layout_constraintStart_toEndOf="@id/linear_weight"
-                app:layout_constraintTop_toTopOf="@+id/linear_weight" />
+                app:layout_constraintTop_toTopOf="@+id/linear_weight"
+                app:layout_constraintVertical_chainStyle="spread" />
 
             <LinearLayout
                 android:id="@+id/linear_height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="30dp"
-                app:layout_constraintVertical_chainStyle="spread"
-                app:layout_constraintTop_toBottomOf="@+id/poke_type_1"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/splitter">
+                app:layout_constraintStart_toEndOf="@+id/splitter"
+                app:layout_constraintTop_toBottomOf="@+id/poke_type_1"
+                app:layout_constraintVertical_chainStyle="spread">
+
                 <ImageView
                     android:id="@+id/height_img"
-                    android:src="@drawable/ic_height"
                     style="@style/image_icon"
-                    android:contentDescription="@string/image_icon"/>
+                    android:contentDescription="@string/image_icon"
+                    android:src="@drawable/ic_height" />
+
                 <TextView
                     android:id="@+id/height_text"
                     style="@style/text_view_under_icon"
-                    tools:text="9.4m"/>
+                    tools:text="9.4m" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/stats_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="25dp"
                 android:text="@string/base_stats"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/linear_weight"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear_weight" />
+
             <ProgressBar
                 android:id="@+id/stat_hp"
                 style="@style/progress_bar"
-                app:layout_constraintTop_toBottomOf="@+id/stats_name"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/stats_name" />
+
             <TextView
                 style="@style/progress_bar_stat_name"
                 android:text="@string/stat_hp"
                 app:layout_constraintStart_toStartOf="@+id/stat_hp"
-                app:layout_constraintTop_toTopOf="@+id/stat_hp"/>
+                app:layout_constraintTop_toTopOf="@+id/stat_hp" />
+
             <TextView
                 android:id="@+id/hp_count"
                 style="@style/progress_bar_stat_number"
                 app:layout_constraintEnd_toEndOf="@+id/stat_hp"
                 app:layout_constraintTop_toTopOf="@+id/stat_hp"
-                tools:text="76"/>
+                tools:text="76" />
+
             <ProgressBar
                 android:id="@+id/stat_attack"
                 style="@style/progress_bar"
-                app:layout_constraintTop_toBottomOf="@+id/stat_hp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/stat_hp" />
+
             <TextView
                 style="@style/progress_bar_stat_name"
                 android:text="@string/stat_attack"
                 app:layout_constraintStart_toStartOf="@+id/stat_attack"
-                app:layout_constraintTop_toTopOf="@+id/stat_attack"/>
+                app:layout_constraintTop_toTopOf="@+id/stat_attack" />
+
             <TextView
                 style="@style/progress_bar_stat_number"
                 app:layout_constraintEnd_toEndOf="@+id/stat_attack"
                 app:layout_constraintTop_toTopOf="@+id/stat_attack"
-                tools:text="76"/>
+                tools:text="76" />
+
             <ProgressBar
                 android:id="@+id/stat_defence"
                 style="@style/progress_bar"
-                app:layout_constraintTop_toBottomOf="@+id/stat_attack"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/stat_attack" />
+
             <TextView
                 style="@style/progress_bar_stat_name"
                 android:text="@string/stat_defence"
                 app:layout_constraintStart_toStartOf="@+id/stat_defence"
-                app:layout_constraintTop_toTopOf="@+id/stat_defence"/>
+                app:layout_constraintTop_toTopOf="@+id/stat_defence" />
+
             <TextView
                 style="@style/progress_bar_stat_number"
                 app:layout_constraintEnd_toEndOf="@+id/stat_defence"
                 app:layout_constraintTop_toTopOf="@+id/stat_defence"
-                tools:text="76"/>
+                tools:text="76" />
+
             <ProgressBar
                 android:id="@+id/stat_speed"
                 style="@style/progress_bar"
-                app:layout_constraintTop_toBottomOf="@+id/stat_defence"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/stat_defence" />
+
             <TextView
                 style="@style/progress_bar_stat_name"
                 android:text="@string/stat_speed"
                 app:layout_constraintStart_toStartOf="@+id/stat_speed"
-                app:layout_constraintTop_toTopOf="@+id/stat_speed"/>
+                app:layout_constraintTop_toTopOf="@+id/stat_speed" />
+
             <TextView
                 style="@style/progress_bar_stat_number"
                 app:layout_constraintEnd_toEndOf="@+id/stat_speed"
                 app:layout_constraintTop_toTopOf="@+id/stat_speed"
-                tools:text="76"/>
+                tools:text="76" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/poke_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/add_pokemon"
+                style="@style/material_button_pokemon_type"
+                app:cornerRadius="40dp"
+                app:layout_constraintTop_toBottomOf="@+id/stat_speed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/poke_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:text="@string/delete_pokemon"
+                style="@style/material_button_pokemon_type"
+                app:cornerRadius="40dp"
+                app:layout_constraintTop_toBottomOf="@+id/stat_speed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/fragment_loading"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

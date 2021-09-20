@@ -7,7 +7,7 @@
         <item name="android:textColorHint">@color/white</item>
         <item name="android:hint">@string/pokemon_search</item>
     </style>
-    <style name="search_text_input_edit_text_style">
+    <style name="search_text_input_edit_text_style" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginBottom">6dp</item>
