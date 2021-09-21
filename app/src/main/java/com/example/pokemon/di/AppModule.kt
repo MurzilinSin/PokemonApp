@@ -21,6 +21,7 @@ val retrofitModule : Module = module {
     single { provideGson() }
     single { provideRetrofit() }
 }
+
 fun provideHttpClient(): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
     return httpClient.build()
