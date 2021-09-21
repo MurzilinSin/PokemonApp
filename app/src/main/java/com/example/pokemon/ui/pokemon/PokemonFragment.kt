@@ -1,6 +1,7 @@
 package com.example.pokemon.ui.pokemon
 
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
+private const val FRAGMENT_TYPE = "type"
 class SearchFragment : Fragment() {
     private var _binding: FragmentPokemonBinding? = null
     private val binding get() = _binding!!
@@ -39,10 +41,9 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        when(arguments?.getSerializable("type")) {
+        when(arguments?.getSerializable(FRAGMENT_TYPE)) {
             Type.Random -> {
                 binding.pokemonSearch.visibility = View.GONE
-                marginOnRandomFragment()
                 random()
             }
             Type.Search -> {
@@ -65,7 +66,12 @@ class SearchFragment : Fragment() {
             val pokemonName = binding.inputEditText.text.toString().trim()
             if(pokemonName.isNotEmpty()){
                 viewModel.getPokemon(pokemonName)
+            } else {
+                dialogWithOneButtonShow("Error",
+                    "U need to enter some name of Pokemon or his ID to work",
+                    "Try again")
             }
+            binding.inputEditText.text = null
         }
     }
 
@@ -81,83 +87,81 @@ class SearchFragment : Fragment() {
         when(responseData) {
             is ResponseData.Success -> {
                 val pokeData = responseData.pokemonResponse
-                var pokeDB: Pokemon? = null
-                for (pokemonDB in pokemonsDB) {
-                    if(pokemonDB.id == pokeData.id) {
-                        pokeDB = pokemonDB
-                    }
-                }
-               if(pokeDB != null) {
-                   binding.pokeAdd.visibility = View.GONE
-                   binding.pokeDelete.visibility = View.VISIBLE
-               } else {
-                   binding.pokeAdd.visibility = View.VISIBLE
-                   binding.pokeDelete.visibility = View.GONE
-               }
-                binding.pokeImg.visibility = View.VISIBLE
-                binding.pokeCard.visibility = View.VISIBLE
-                binding.pokeType2.visibility = View.GONE
-                binding.loading.visibility = View.GONE
-                Picasso
-                    .get()
-                    .load(pokeData.sprites.front_default)
-                    .into(binding.pokeImg)
-                val gd = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(ContextCompat.getColor(requireContext(),parseTypeToColor(pokeData.types[0].type)),
-                               ContextCompat.getColor(requireContext(),R.color.black)))
-                gd.cornerRadius = 0f
-                binding.mainContainer.background = gd
-                val text2 = "#${pokeData.id} ${pokeData.name}"
-                binding.pokeName.text = text2
-                binding.pokeType1.apply {
-                    text = pokeData.types[0].type.name
-                    backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(),parseTypeToColor(pokeData.types[0].type))
-                }
-                binding.pokeAdd.backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(), parseTypeToColor(pokeData.types[0].type))
-                binding.pokeDelete.backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(), parseTypeToColor(pokeData.types[0].type))
-
-                if(pokeData.types.size > 1){
-                    binding.pokeType2.apply {
-                        visibility = View.VISIBLE
-                        text = pokeData.types[1].type.name
-                        backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(),parseTypeToColor(pokeData.types[1].type))
-                    }
-                    binding.pokeType2.visibility = View.VISIBLE
-                }
-                binding.heightText.text = "${pokeData.height} m"
-                binding.weightText.text = "${pokeData.weight} kg"
-                binding.pokeAdd.setOnClickListener {
-                    viewModel.viewModelScope.launch {
-                        viewModel.addPokemon(pokeData)
-                    }
-                    binding.pokeAdd.visibility = View.GONE
-                    binding.pokeDelete.visibility = View.VISIBLE
-                }
-
-                binding.pokeDelete.setOnClickListener {
-                    viewModel.viewModelScope.launch {
-                        viewModel.deletePokemon(pokeData)
-                    }
-                    binding.pokeAdd.visibility = View.VISIBLE
-                    binding.pokeDelete.visibility = View.GONE
-                }
-
-                setProgressBarUI(pokeData)
+               initViews(pokeData)
             }
             is ResponseData.Loading -> {
                 binding.loading.visibility = View.VISIBLE
             }
             is ResponseData.Error -> {
-               /* dialogWithOneButtonShow("Error",
-                    "Incorrect name of city",
-                    "Try another One")*/
-                Throwable(IllegalAccessError())
+                when(arguments?.getSerializable(FRAGMENT_TYPE)) {
+                    Type.Random -> {
+                        dialogWithOneButtonShow("Error",
+                            "Something happens with server",
+                            "Try again")
+                        Throwable(IllegalAccessError())
+                    }
+                    Type.Search -> {
+                        dialogWithOneButtonShow("Error",
+                            "Incorrect name of pokemon",
+                            "Try another One")
+                        Throwable(IllegalAccessError())
+                    }
+                }
             }
         }
     }
-    private fun marginOnRandomFragment(){
-        val params: ViewGroup.MarginLayoutParams = binding.pokeCard.layoutParams as ViewGroup.MarginLayoutParams
-        params.topMargin = 30
+
+    private fun initViews(pokeData: Pokemon) {
+        setButtonDBVisibility(pokeData)
+        binding.pokeImg.visibility = View.VISIBLE
+        binding.pokeCard.visibility = View.VISIBLE
+        binding.pokeType2.visibility = View.GONE
+        binding.loading.visibility = View.GONE
+        Picasso
+            .get()
+            .load(pokeData.sprites.front_default)
+            .into(binding.pokeImg)
+        val gd = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(ContextCompat.getColor(requireContext(),parseTypeToColor(pokeData.types[0].type)),
+                ContextCompat.getColor(requireContext(),R.color.black)))
+        gd.cornerRadius = 0f
+        binding.mainContainer.background = gd
+        val pokeName = "#${pokeData.id} ${pokeData.name}"
+        binding.pokeName.text = pokeName
+        binding.pokeType1.apply {
+            text = pokeData.types[0].type.name
+            backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(),parseTypeToColor(pokeData.types[0].type))
+        }
+        binding.pokeAdd.backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(), parseTypeToColor(pokeData.types[0].type))
+        binding.pokeDelete.backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(), parseTypeToColor(pokeData.types[0].type))
+
+        if(pokeData.types.size > 1){
+            binding.pokeType2.apply {
+                visibility = View.VISIBLE
+                text = pokeData.types[1].type.name
+                backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(),parseTypeToColor(pokeData.types[1].type))
+            }
+            binding.pokeType2.visibility = View.VISIBLE
+        }
+        val height = "${pokeData.height} m"
+        val weight = "${pokeData.weight} kg"
+        binding.heightText.text = height
+        binding.weightText.text = weight
+        binding.pokeAdd.setOnClickListener {
+            viewModel.viewModelScope.launch {
+                viewModel.addPokemon(pokeData)
+            }
+            binding.pokeAdd.visibility = View.GONE
+            binding.pokeDelete.visibility = View.VISIBLE
+        }
+        binding.pokeDelete.setOnClickListener {
+            viewModel.viewModelScope.launch {
+                viewModel.deletePokemon(pokeData)
+            }
+            binding.pokeAdd.visibility = View.VISIBLE
+            binding.pokeDelete.visibility = View.GONE
+        }
+        setProgressBarUI(pokeData)
     }
 
     private fun setProgressBarUI(pokeData: Pokemon) {
@@ -181,5 +185,38 @@ class SearchFragment : Fragment() {
         val animator = ObjectAnimator.ofInt(progressBar,"progress",0,end)
         animator.duration = duration
         animator.start()
+    }
+
+    private fun dialogWithOneButtonShow(title: String, description: String, textButton: String) {
+        val dialog = AlertDialog.Builder(context,R.style.MyDialogTheme)
+        dialog.apply {
+            setTitle(title)
+            setMessage(description)
+            setPositiveButton(textButton)
+            { dialog, _ ->
+                dialog.cancel()
+            }
+        }.create().show()
+    }
+
+    private fun setButtonDBVisibility(pokeData: Pokemon) {
+        var pokeDB: Pokemon? = null
+        for (pokemonDB in pokemonsDB) {
+            if(pokemonDB.id == pokeData.id) {
+                pokeDB = pokemonDB
+            }
+        }
+        if(pokeDB != null) {
+            binding.pokeAdd.visibility = View.GONE
+            binding.pokeDelete.visibility = View.VISIBLE
+        } else {
+            binding.pokeAdd.visibility = View.VISIBLE
+            binding.pokeDelete.visibility = View.GONE
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

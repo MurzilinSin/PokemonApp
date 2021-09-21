@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#B1B1B1</color>
     <color name="grayAlpha20">#33E6E6E6</color>
-    <color name="alpha_10_white">#1AFFFFFF</color>
+    <color name="whiteAlpha20">#1AFFFFFF</color>
+    <color name="blackAlpha40">#66000000</color>
 
     <color name="hp">#E6D329</color>
     <color name="attack">#DF2214</color>
