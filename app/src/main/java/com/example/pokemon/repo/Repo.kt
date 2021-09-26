@@ -15,6 +15,7 @@ class Repo private constructor(context: Context){
     ).build()
     private val pokemonDAO = db.pokemonDAO()
 
+    fun getListPokemons(): List<Pokemon> = pokemonDAO.getListPokemons()
     fun getPokemons(): LiveData<List<Pokemon>> = pokemonDAO.getPokemons()
     suspend fun addPokemon(pokemon: Pokemon) = pokemonDAO.addPokemon(pokemon)
     suspend fun deletePokemon(pokemon: Pokemon) = pokemonDAO.deletePokemon(pokemon)

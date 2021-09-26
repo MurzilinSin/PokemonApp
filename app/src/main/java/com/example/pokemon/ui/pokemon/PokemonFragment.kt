@@ -19,16 +19,20 @@ import com.example.pokemon.model.Type
 import com.example.pokemon.model.responce.Pokemon
 import com.example.pokemon.ui.parseTypeToColor
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
 private const val FRAGMENT_TYPE = "type"
+private const val SAVED_POKEMON = "pokeSaved"
 class SearchFragment : Fragment() {
     private var _binding: FragmentPokemonBinding? = null
     private val binding get() = _binding!!
     private val viewModel by inject<PokemonViewModel>()
     private var pokemonsDB: MutableList<Pokemon> = mutableListOf()
+    private var pokeSaved: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,31 +45,40 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        when(arguments?.getSerializable(FRAGMENT_TYPE)) {
-            Type.Random -> {
-                binding.pokemonSearch.visibility = View.GONE
-                random()
-            }
-            Type.Search -> {
-                binding.pokemonSearch.visibility = View.VISIBLE
-                search()
-            }
-        }
-        viewModel.pokeLiveData.observe(viewLifecycleOwner,{ pokemons ->
+        pokeSaved = savedInstanceState?.getString(SAVED_POKEMON)
+        viewModel.pokeLiveData.observe(viewLifecycleOwner, { pokemons ->
             for (pokemon in pokemons) {
                 pokemonsDB.add(pokemon)
             }
         })
+        when(arguments?.getSerializable(FRAGMENT_TYPE)) {
+            Type.Random -> {
+                binding.pokemonSearch.visibility = View.GONE
+                random(pokeSaved)
+            }
+            Type.Search -> {
+                binding.pokemonSearch.visibility = View.VISIBLE
+                search(pokeSaved)
+            }
+        }
     }
 
-    private fun search(){
+    private fun search(savedPoke: String?) {
         viewModel.ldPokemon.observe(viewLifecycleOwner, {
             renderData(it)
         })
+        if(savedPoke != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                viewModel.getPokemon(savedPoke)
+            }
+        }
         binding.pokemonSearch.setEndIconOnClickListener {
             val pokemonName = binding.inputEditText.text.toString().trim()
             if(pokemonName.isNotEmpty()){
-                viewModel.getPokemon(pokemonName)
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.getPokemon(pokemonName)
+                }
+            pokeSaved = pokemonName
             } else {
                 dialogWithOneButtonShow("Error",
                     "U need to enter some name of Pokemon or his ID to work",
@@ -75,19 +88,29 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun random() {
-        val random: Int = Random.nextInt(1,1000)
+    private fun random(savedPoke: String?) {
         viewModel.ldPokemon.observe(viewLifecycleOwner, {
             renderData(it)
         })
-        viewModel.getPokemon(random.toString())
+        pokeSaved = if(savedPoke != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                viewModel.getPokemon(savedPoke)
+            }
+            savedPoke
+        } else {
+            val random: Int = Random.nextInt(1,1000)
+            CoroutineScope(Dispatchers.Main).launch {
+                viewModel.getPokemon(random.toString())
+            }
+            random.toString()
+        }
     }
 
     private fun renderData(responseData: ResponseData?) {
         when(responseData) {
             is ResponseData.Success -> {
                 val pokeData = responseData.pokemonResponse
-               initViews(pokeData)
+                initViews(pokeData)
             }
             is ResponseData.Loading -> {
                 binding.loading.visibility = View.VISIBLE
@@ -134,7 +157,6 @@ class SearchFragment : Fragment() {
         }
         binding.pokeAdd.backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(), parseTypeToColor(pokeData.types[0].type))
         binding.pokeDelete.backgroundTintList = ContextCompat.getColorStateList(this@SearchFragment.requireContext(), parseTypeToColor(pokeData.types[0].type))
-
         if(pokeData.types.size > 1){
             binding.pokeType2.apply {
                 visibility = View.VISIBLE
@@ -218,5 +240,12 @@ class SearchFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if(pokeSaved != null) {
+            outState.putString(SAVED_POKEMON, pokeSaved)
+        }
     }
 }
