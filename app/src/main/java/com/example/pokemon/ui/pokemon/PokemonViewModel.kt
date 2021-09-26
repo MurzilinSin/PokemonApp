@@ -1,5 +1,6 @@
 package com.example.pokemon.ui.pokemon
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,16 +16,20 @@ import kotlinx.coroutines.launch
 class PokemonViewModel(private val pokeApi: PokeApi) : ViewModel() {
     val ldPokemon: MutableLiveData<ResponseData> = MutableLiveData()
     private val pokeRepo = Repo.get()
-    val pokeLiveData = pokeRepo.getPokemons()
+    var pokeLiveData = pokeRepo.getPokemons()
 
-    fun getPokemon(pokemonName : String): LiveData<ResponseData> {
+    suspend fun getPokemon(pokemonName : String): LiveData<ResponseData> {
         sendServerRequest(pokemonName)
         return ldPokemon
     }
     private var job: Job? = null
 
-    private fun sendServerRequest(pokemonName: String) {
+    private suspend fun sendServerRequest(pokemonName: String) {
         ldPokemon.value = ResponseData.Loading(null)
+        val jobPoke = CoroutineScope(Dispatchers.IO).launch {
+            pokeRepo.getListPokemons()
+        }
+        jobPoke.join()
         job = CoroutineScope(Dispatchers.Main).launch {
             val response = pokeApi.getPokemon(pokemonName)
             if(response.isSuccessful) {

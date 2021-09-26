@@ -11,6 +11,8 @@ import com.example.pokemon.model.responce.Pokemon
 interface PokemonDAO {
     @Query("SELECT * FROM pokemon")
     fun getPokemons(): LiveData<List<Pokemon>>
+    @Query("SELECT * FROM pokemon")
+    fun getListPokemons(): List<Pokemon>
     @Insert
     suspend fun addPokemon(pokemon: Pokemon)
     @Delete
